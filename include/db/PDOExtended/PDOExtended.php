@@ -304,10 +304,10 @@
 		 * @access public
 		 */
 		public static function CleanInput($Input, $ScriptTags = true, $StyleTags = true, $MultiLineComments = true) {
-			$RemovePatterns = Array();			
-			(bool) $ScriptTags AND $RemovePatterns[] = '@<script[^>]*?>.*?</script>@si';	// Strip out javascript
-			(bool) $StyleTags  AND $RemovePatterns[] = '@<style[^>]*?>.*?</style>@siU';	// Strip style tags properly
-			(bool) $MultiLineComments AND $RemovePatterns[]	= '@<![\s\S]*?--[ \t\n\r]*>@';	// Strip multi-line comments
-			return preg_replace($RemovePatterns, null, $Input);
-		}				
+			$RemovePatterns = Array();
+			(bool) $ScriptTags AND $RemovePatterns[] = '@<script[^>]*?>.*?</script>@si';    // Strip out javascript
+			(bool) $StyleTags  AND $RemovePatterns[] = '@<style[^>]*?>.*?</style>@siU';    // Strip style tags properly
+			(bool) $MultiLineComments AND $RemovePatterns[]    = '@<![\s\S]*?--[ \t\n\r]*>@';    // Strip multi-line comments
+			return preg_replace($RemovePatterns, '', $Input);
+		}			
 	}

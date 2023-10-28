@@ -1,8 +1,9 @@
 <?php
-if (!sizeof($list)) {
+if (!is_array($list) || !count($list)) {
 	$l = 'c';
 }
 switch ($l) {
+	// rest of the code
 	case 'l':
 		if ($page != "config") {
 			echo '<header><h4>' . tr("LIST_OF_LISTS") . '</h4></header>';

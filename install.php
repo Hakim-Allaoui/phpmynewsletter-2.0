@@ -1,23 +1,23 @@
 <?php
-$version        = '2.0.5';
-$timezone       = '';
+$version = '2.0.5';
+$timezone = '';
 error_reporting(E_ALL);
-ini_set('display_errors',1);
-if(file_exists("include/config.php")) {
+ini_set('display_errors', 1);
+if (file_exists("include/config.php")) {
 	header("Location:index.php");
 	exit;
-}else{
+} else {
 	include('include/lib/pmn_fonctions.php');
 	include('include/lib/constantes.php');
 }
-$langfileArray  = array('english','francais');
-$langfile       = (isset($_POST['langfile'])&&in_array($_POST['langfile'],$langfileArray) ? $_POST['langfile'] :"");
-$db_typeArray   = array('mysql');
-$db_type        = (isset($_POST['db_type'])&&in_array($_POST['db_type'],$db_typeArray) ? $_POST['db_type'] : "");
-$stepArray      = array(1,2,3,4);
-$step           = (isset($_POST['step'])&&in_array($_POST['step'],$stepArray) ? $_POST['step'] : 1);
-$opArray        = array('saveConfig');
-$op             = (isset($_POST['op'])&&in_array($_POST['op'],$opArray) ? $_POST['op'] : "");
+$langfileArray = array('english', 'francais');
+$langfile = (isset($_POST['langfile']) && in_array($_POST['langfile'], $langfileArray) ? $_POST['langfile'] : "");
+$db_typeArray = array('mysql');
+$db_type = (isset($_POST['db_type']) && in_array($_POST['db_type'], $db_typeArray) ? $_POST['db_type'] : "");
+$stepArray = array(1, 2, 3, 4);
+$step = (isset($_POST['step']) && in_array($_POST['step'], $stepArray) ? $_POST['step'] : 1);
+$opArray = array('saveConfig');
+$op = (isset($_POST['op']) && in_array($_POST['op'], $opArray) ? $_POST['op'] : "");
 if (empty($langfile)) {
 	include("./include/lang/francais.php");
 } else {
@@ -26,19 +26,28 @@ if (empty($langfile)) {
 ?>
 <!DOCTYPE HTML>
 <html lang="fr">
+
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title><?php echo tr("INSTALL_TITLE");?></title>
+	<title>
+		<?php echo tr("INSTALL_TITLE"); ?>
+	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="js/wysiwyg/jquery-1.10.2.min.js"></script>
 	<script src="js/wysiwyg/jquery-ui.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
 	<link href="//code.jquery.com/ui/1.12.0/themes/redmond/jquery-ui.css" rel="stylesheet" media="screen">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+		rel="stylesheet">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-<?php echo tr("I18N_LNG");?>.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/i18n/defaults-<?php echo tr("I18N_LNG"); ?>.min.js"></script>
 	<link href="css/styles.css" rel="stylesheet">
 	<!--[if lt IE 9]>
 		<script src="//oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -48,61 +57,70 @@ if (empty($langfile)) {
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/jsclock-0.8.min.js"></script>
 </head>
+
 <body>
 	<div class="container">
 		<div class="jumbotron">
 			<h1><a href="http://www.phpmynewsletter.com">PhpMyNewsLetter</a></h1>
 			<p>
-				<a href="http://www.phpmynewsletter.com/forum/" target="_blank"><?php echo tr("SUPPORT");?></a>
+				<a href="http://www.phpmynewsletter.com/forum/" target="_blank">
+					<?php echo tr("SUPPORT"); ?>
+				</a>
 				-
-				<a><?php echo tr("TIME_SERVER");?> : <span id='ts'></span></a>
+				<a>
+					<?php echo tr("TIME_SERVER"); ?> : <span id='ts'></span>
+				</a>
 			</p>
 		</div>
 		<div class="panel-group">
 			<div class="panel panel-primary">
-				<div class="panel-heading"><h2 class="section_title"><?php echo tr("INSTALL_TITLE") . " " . $step . "/4";?></a>
-					<h5><?php
-					echo ($step==1 ?' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE") :
-						($step==2 ?' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE").' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_DB_TYPE") :
-							($step==3 ?' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE").' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_DB_TYPE").' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_ENVIRONMENT").', '.tr("INSTALL_DB_TITLE").', '.tr("INSTALL_GENERAL_SETTINGS") :
-								($step==4 ?  '<span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE").' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_DB_TYPE").' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_ENVIRONMENT").', '.tr("INSTALL_DB_TITLE").', '.tr("INSTALL_GENERAL_SETTINGS").' <span class="glyphicon glyphicon-circle-arrow-right"></span> '.tr("INSTALL_STEP_FINISHED") : ''
+				<div class="panel-heading">
+					<h2 class="section_title">
+						<?php echo tr("INSTALL_TITLE") . " " . $step . "/4"; ?></a>
+						<h5>
+							<?php
+							echo ($step == 1 ? ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE") :
+								($step == 2 ? ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE") . ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_DB_TYPE") :
+									($step == 3 ? ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE") . ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_DB_TYPE") . ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_ENVIRONMENT") . ', ' . tr("INSTALL_DB_TITLE") . ', ' . tr("INSTALL_GENERAL_SETTINGS") :
+										($step == 4 ? '<span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_VERSIONS_EXTENSIONS") . ', ' . tr("INSTALL_LANGUAGE") . ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_DB_TYPE") . ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_ENVIRONMENT") . ', ' . tr("INSTALL_DB_TITLE") . ', ' . tr("INSTALL_GENERAL_SETTINGS") . ' <span class="glyphicon glyphicon-circle-arrow-right"></span> ' . tr("INSTALL_STEP_FINISHED") : ''
+										)
+									)
 								)
 							)
-						)
-					)
-					?></h5>
+								?>
+						</h5>
 				</div>
 				<div class="panel-body">
-				<?php
-					if($step==1){
-						echo '<h3>'.tr("INSTALL_VERSIONS_EXTENSIONS").'</h3>';
+					<?php
+					if ($step == 1) {
+						echo '<h3>' . tr("INSTALL_VERSIONS_EXTENSIONS") . '</h3>';
 						if (version_compare(PHP_VERSION, '5.3.0', '>')) {
-							echo "<h4 class='alert alert-success'>PHP : ".phpversion()." ".tr("OK_BTN")."</h4>";
+							echo "<h4 class='alert alert-success'>PHP : " . phpversion() . " " . tr("OK_BTN") . "</h4>";
 						} else {
-							echo "<h4 class='alert alert-danger'>PHP : ".phpversion()." ".tr("INSTALL_OBSOLETE")."</h4>";
+							echo "<h4 class='alert alert-danger'>PHP : " . phpversion() . " " . tr("INSTALL_OBSOLETE") . "</h4>";
 						}
 						if (extension_loaded('imap')) {
-							echo "<h4 class='alert alert-success'>".tr("INSTALL_VERSIONS_EXTENSIONS")." imap ".tr("OK_BTN")."</h4>";
+							echo "<h4 class='alert alert-success'>" . tr("INSTALL_VERSIONS_EXTENSIONS") . " imap " . tr("OK_BTN") . "</h4>";
 						} else {
-							echo "<h4 class='alert alert-danger'>".tr("INSTALL_VERSIONS_EXTENSIONS")." imap ".tr("INSTALL_MISSING")."</h4>";
+							echo "<h4 class='alert alert-danger'>" . tr("INSTALL_VERSIONS_EXTENSIONS") . " imap " . tr("INSTALL_MISSING") . "</h4>";
 						}
 						if (extension_loaded('curl')) {
-							echo "<h4 class='alert alert-success'>".tr("INSTALL_VERSIONS_EXTENSIONS")." curl ".tr("OK_BTN")."</h4>";
+							echo "<h4 class='alert alert-success'>" . tr("INSTALL_VERSIONS_EXTENSIONS") . " curl " . tr("OK_BTN") . "</h4>";
 						} else {
-							echo "<h4 class='alert alert-danger'>".tr("INSTALL_VERSIONS_EXTENSIONS")." curl ".tr("INSTALL_MISSING")."</h4>";
+							echo "<h4 class='alert alert-danger'>" . tr("INSTALL_VERSIONS_EXTENSIONS") . " curl " . tr("INSTALL_MISSING") . "</h4>";
 						}
 					}
 					if (empty($langfile)) {
-						echo '<h3>'.tr("INSTALL_LANGUAGE").'</h3>';
-						echo "<form action='".$_SERVER['PHP_SELF']."' method='post'>";
+						echo '<h3>' . tr("INSTALL_LANGUAGE") . '</h3>';
+						echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
 						echo "<input type='hidden' name='step' value=" . ($step + 1) . " />";
 						echo tr("INSTALL_LANGUAGE_LABEL") . " : <select name='langfile' class='selectpicker' data-width='auto'>";
 						echo "<option value='english'>English</option><option value='francais' selected>Francais</option>";
 						echo "</select><br /><br /><input class='btn btn-primary' type='submit' value='" . tr("OK_BTN") . "'>";
 						echo "</form>";
 					} elseif (empty($db_type) && isset($langfile)) {
-						echo '<h3>'.tr("INSTALL_DB_TYPE").'</h3>';
-						echo "<form action='".$_SERVER['PHP_SELF']."' method='post'>";
+						echo '<h3>' . tr("INSTALL_DB_TYPE") . '</h3>';
+						echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
 						echo tr("INSTALL_DB_TYPE") . " : <select name='db_type' class='selectpicker' data-width='auto'>";
 						echo "<option value='mysql' selected>MySQL</option>";
 						echo "<input type='hidden' NAME='langfile' value='$langfile'>";
@@ -110,56 +128,56 @@ if (empty($langfile)) {
 						echo "</select><br /><br /><input class='btn btn-primary' type='submit' value='" . tr("OK_BTN") . "'>";
 						echo "</form>";
 					} elseif (isset($db_type) && empty($op) && isset($langfile)) {
-						echo "<form method='post' name='global_config' action='".$_SERVER['PHP_SELF']."'>";
-						echo '<h3>'.tr("INSTALL_ENVIRONMENT").', '.tr("INSTALL_DB_TITLE").', '.tr("INSTALL_GENERAL_SETTINGS").'</h3>';
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_ENVIRONMENT") . " : </div><div class='col-md-6'><select name='type_env' class='selectpicker' data-width='auto'>";
-						echo "<option value='dev'>".tr("INSTALL_DEVELOPMENT")."</option><option value='prod' selected>".tr("INSTALL_PRODUCTION")."</option>";
+						echo "<form method='post' name='global_config' action='" . $_SERVER['PHP_SELF'] . "'>";
+						echo '<h3>' . tr("INSTALL_ENVIRONMENT") . ', ' . tr("INSTALL_DB_TITLE") . ', ' . tr("INSTALL_GENERAL_SETTINGS") . '</h3>';
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_ENVIRONMENT") . " : </div><div class='col-md-6'><select name='type_env' class='selectpicker' data-width='auto'>";
+						echo "<option value='dev'>" . tr("INSTALL_DEVELOPMENT") . "</option><option value='prod' selected>" . tr("INSTALL_PRODUCTION") . "</option>";
 						echo '</select></div></div><br>';
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SERVER_TYPE") . " : </div><div class='col-md-6'><select name='type_serveur' class='selectpicker' data-width='auto'>";
-						echo "<option value='shared' selected>".tr("SHARED_SERVER")."</option><option value='dedicated'>".tr("DEDICATED_SERVER")."</option>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SERVER_TYPE") . " : </div><div class='col-md-6'><select name='type_serveur' class='selectpicker' data-width='auto'>";
+						echo "<option value='shared' selected>" . tr("SHARED_SERVER") . "</option><option value='dedicated'>" . tr("DEDICATED_SERVER") . "</option>";
 						echo "</select></div></div><br>";
-						echo '<h3>'.tr("INSTALL_DB_TITLE").'</h3>';
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_HOSTNAME") . 	" : </div><div class='col-md-6'><input class='form-control' type='text'  name='db_host' value='localhost'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_NAME") . 		" : </div><div class='col-md-6'><input class='form-control' type='text'  name='db_name' value='phpMyNewsletter'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_LOGIN") . 	" : </div><div class='col-md-6'><input class='form-control' type='text'  name='db_login' value=''></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_PASS") . 		" : </div><div class='col-md-6'><input class='form-control' type='password' name='db_pass' value=''></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_TABLE_PREFIX") . 	" : </div><div class='col-md-6'><input class='form-control' type='text'  name='table_prefix' value='pmn2_'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_CREATE_DB") . 	" : </div><div class='col-md-6'><input type='checkbox' name='createdb' value='1'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_DB_CREATE_TABLES") . " : </div><div class='col-md-6'><input type='checkbox' checked name='createtables' value='1'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("STORAGE_ENGINE") . 		" : </div><div class='col-md-6'><select name='storage_engine' class='selectpicker' data-width='auto'>";
+						echo '<h3>' . tr("INSTALL_DB_TITLE") . '</h3>';
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_HOSTNAME") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='db_host' value='localhost'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_NAME") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='db_name' value='phpMyNewsletter'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_LOGIN") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='db_login' value=''></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_PASS") . " : </div><div class='col-md-6'><input class='form-control' type='password' name='db_pass' value=''></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_TABLE_PREFIX") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='table_prefix' value='pmn2_'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_CREATE_DB") . " : </div><div class='col-md-6'><input type='checkbox' name='createdb' value='1'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_DB_CREATE_TABLES") . " : </div><div class='col-md-6'><input type='checkbox' checked name='createtables' value='1'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("STORAGE_ENGINE") . " : </div><div class='col-md-6'><select name='storage_engine' class='selectpicker' data-width='auto'>";
 						echo "<option value='MyISAM' selected>MyISAM</option><option value='InnoDB'>InnoDB</option></select></div></div><br>";
-						echo '<h3>'.tr("INSTALL_GENERAL_SETTINGS").'</h3>';
-						echo "<div class='row'><div class='col-md-4'>".tr("LOCAL_TIME_ZONE"). 		" : </div><div class='col-md-6'><select name='timezone' class='selectpicker' data-width='auto'>".$LISTE_PAYS_SIMPLE.'</select></div></div><br>';
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_ADMIN_PASS")."<br>(Attention : cette zone n'est pas cachée, le mot de passe est affiché en clair) : </div><div class='col-md-6'><input class='form-control' type='text' id='admin_pass' name='admin_pass' value=''></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_ADMIN_BASEURL")." : </div><div class='col-md-6'><input class='form-control' type='text'  name='base_url' size='30' value='".((isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS'] == "on") ? "https" : "http")."://" . $_SERVER['HTTP_HOST'] . "'><span style='text-transform: lowercase;'>(" . tr("EXAMPLE") . " : http://www.example.com)</span></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_ADMIN_PATH_TO_PMNL")." : </div><div class='col-md-6'><input class='form-control' type='text'  name='path' size='30' value='".str_replace((__DIR__), "",$_SERVER['DOCUMENT_ROOT'])."/'><span style='text-transform: lowercase;'>(" . tr("EXAMPLE") . " : tools/newsletter/)</span></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_LANGUAGE"). 		" : </div><div class='col-md-6'><select name='language' class='selectpicker' data-width='auto'>".getLanguageList($langfile)."</select></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_ADMIN_NAME"). 	" : </div><div class='col-md-6'><input class='form-control' type='text'  name='admin_name' size='30' value='Admin'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_ADMIN_EMAIL"). 	" : </div><div class='col-md-6'><input class='form-control' type='text'  name='admin_email' size='30' value='admin@" . @str_replace("www.", "",$_SERVER['HTTP_HOST']) . "'></div></div><br>";
-						echo '<h3>'.tr("INSTALL_MESSAGE_SENDING_TITLE").'</h3>';
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_MESSAGE_SENDING_LOOP")." : </div><div class='col-md-6'><input type='text'  name='sending_limit' size='3' value='3'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SENDING_METHOD")." : </div><div class='col-md-6'><select name='sending_method' class='selectpicker' data-width='auto'>";
+						echo '<h3>' . tr("INSTALL_GENERAL_SETTINGS") . '</h3>';
+						echo "<div class='row'><div class='col-md-4'>" . tr("LOCAL_TIME_ZONE") . " : </div><div class='col-md-6'><select name='timezone' class='selectpicker' data-width='auto'>" . $LISTE_PAYS_SIMPLE . '</select></div></div><br>';
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_ADMIN_PASS") . "<br>(Attention : cette zone n'est pas cachée, le mot de passe est affiché en clair) : </div><div class='col-md-6'><input class='form-control' type='text' id='admin_pass' name='admin_pass' value=''></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_ADMIN_BASEURL") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='base_url' size='30' value='" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "'><span style='text-transform: lowercase;'>(" . tr("EXAMPLE") . " : http://www.example.com)</span></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_ADMIN_PATH_TO_PMNL") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='path' size='30' value='" . str_replace((__DIR__), "", $_SERVER['DOCUMENT_ROOT']) . "/'><span style='text-transform: lowercase;'>(" . tr("EXAMPLE") . " : tools/newsletter/)</span></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_LANGUAGE") . " : </div><div class='col-md-6'><select name='language' class='selectpicker' data-width='auto'>" . getLanguageList($langfile) . "</select></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_ADMIN_NAME") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='admin_name' size='30' value='Admin'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_ADMIN_EMAIL") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='admin_email' size='30' value='admin@" . @str_replace("www.", "", $_SERVER['HTTP_HOST']) . "'></div></div><br>";
+						echo '<h3>' . tr("INSTALL_MESSAGE_SENDING_TITLE") . '</h3>';
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_MESSAGE_SENDING_LOOP") . " : </div><div class='col-md-6'><input type='text'  name='sending_limit' size='3' value='3'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SENDING_METHOD") . " : </div><div class='col-md-6'><select name='sending_method' class='selectpicker' data-width='auto'>";
 						echo "<option value='smtp' selected>smtp</option>";
 						echo "<option value='lbsmtp'>Load Balancing SMTP</option>";
 						echo "<option value='smtp_gmail_tls'>smtp Gmail TLS (port 587)</option>";
 						echo "<option value='smtp_gmail_ssl'>smtp Gmail SSL (port 465)</option>";
-						echo "<option value='smtp_mutu_ovh'>smtp ".tr("INSTALL_SHARED")." OVH</option>";
-						echo "<option value='smtp_mutu_1and1'>smtp ".tr("INSTALL_SHARED")." 1AND1 (fr)</option>";
-						echo "<option value='smtp_mutu_gandi'>smtp ".tr("INSTALL_SHARED")." GANDI</option>";
-						echo "<option value='smtp_mutu_online'>smtp ".tr("INSTALL_SHARED")." ONLINE</option>";
-						echo "<option value='smtp_mutu_infomaniak'>smtp ".tr("INSTALL_SHARED")." INFOMANIAK</option>";
+						echo "<option value='smtp_mutu_ovh'>smtp " . tr("INSTALL_SHARED") . " OVH</option>";
+						echo "<option value='smtp_mutu_1and1'>smtp " . tr("INSTALL_SHARED") . " 1AND1 (fr)</option>";
+						echo "<option value='smtp_mutu_gandi'>smtp " . tr("INSTALL_SHARED") . " GANDI</option>";
+						echo "<option value='smtp_mutu_online'>smtp " . tr("INSTALL_SHARED") . " ONLINE</option>";
+						echo "<option value='smtp_mutu_infomaniak'>smtp " . tr("INSTALL_SHARED") . " INFOMANIAK</option>";
 						echo "<option value='php_mail'>" . tr("INSTALL_PHP_MAIL_FONCTION") . "</option>";
 						echo "</select></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SMTP_HOST").		" : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_host' value=''></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SMTP_PORT").		" : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_port' value=''></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SMTP_AUTH_NEEDED").	" </div><div class='col-md-6'><input type='radio' name='smtp_auth' value='0' checked > " . tr("NO") . "  <input type='radio' name='smtp_auth' value='1'> " . tr("YES")  ."</div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SMTP_USERNAME").	" : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_login' value=''></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SMTP_PASSWORD").	" : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_pass' value=''></div></div><br>";
-						echo '<h3>'.tr("GCONFIG_SUBSCRIPTION_TITLE").'</h3>';
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_VALIDATION_PERIOD").	" : </div><div class='col-md-6'><input class='form-control' type='text'  name='validation_period' size='3' value='6'></div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_SUB_CONFIRM").	" </div><div class='col-md-6'><input type='radio' name='sub_validation'  value='0'> " . tr("NO")."  <input type='radio' name='sub_validation' value='1' checked> " . tr("YES")  ."</div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("INSTALL_UNSUB_CONFIRM") .	" </div><div class='col-md-6'><input type='radio' name='unsub_validation' value='0'> " . tr("NO") . " <input type='radio' name='unsub_validation' value='1' checked> " . tr("YES")."</div></div><br>";
-						echo "<div class='row'><div class='col-md-4'>".tr("GCONFIG_ALERT_SUB") . 	" </div><div class='col-md-6'><input type='radio' name='alert_sub' value='0'> " . tr("NO") ." <input type='radio' name='alert_sub' value='1' checked> " . tr("YES")."</div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SMTP_HOST") . " : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_host' value=''></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SMTP_PORT") . " : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_port' value=''></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SMTP_AUTH_NEEDED") . " </div><div class='col-md-6'><input type='radio' name='smtp_auth' value='0' checked > " . tr("NO") . "  <input type='radio' name='smtp_auth' value='1'> " . tr("YES") . "</div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SMTP_USERNAME") . " : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_login' value=''></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SMTP_PASSWORD") . " : </div><div class='col-md-6'><input class='form-control' type='text' name='smtp_pass' value=''></div></div><br>";
+						echo '<h3>' . tr("GCONFIG_SUBSCRIPTION_TITLE") . '</h3>';
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_VALIDATION_PERIOD") . " : </div><div class='col-md-6'><input class='form-control' type='text'  name='validation_period' size='3' value='6'></div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_SUB_CONFIRM") . " </div><div class='col-md-6'><input type='radio' name='sub_validation'  value='0'> " . tr("NO") . "  <input type='radio' name='sub_validation' value='1' checked> " . tr("YES") . "</div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("INSTALL_UNSUB_CONFIRM") . " </div><div class='col-md-6'><input type='radio' name='unsub_validation' value='0'> " . tr("NO") . " <input type='radio' name='unsub_validation' value='1' checked> " . tr("YES") . "</div></div><br>";
+						echo "<div class='row'><div class='col-md-4'>" . tr("GCONFIG_ALERT_SUB") . " </div><div class='col-md-6'><input type='radio' name='alert_sub' value='0'> " . tr("NO") . " <input type='radio' name='alert_sub' value='1' checked> " . tr("YES") . "</div></div><br>";
 						echo "<input type='hidden' name='op' value='saveConfig'>";
 						echo "<input type='hidden' name='langfile' value='$langfile'>";
 						echo "<input type='hidden' name='db_type' value='$db_type'><br>";
@@ -169,96 +187,96 @@ if (empty($langfile)) {
 						echo "<script>$('#submit').click(function(){if($.trim($('#admin_pass').val())==''){alert('" . tr("INSTALL_CHOOSE_PASSWORD") . "');return false;}})</script>";
 						echo '</form>';
 					} elseif (isset($db_type) && $op == "saveConfig") {
-						echo '<h3>'. tr("INSTALL_RESULT_INSTALLATION") .'</h3>';
-						$createdb          = (isset($_POST['createdb']) ? $_POST['createdb'] : 0);
-						$createtables      = (isset($_POST['createtables']) ? $_POST['createtables'] : 0);
-						$smtp_host         = (isset($_POST['smtp_host']) ? $_POST['smtp_host'] : "");
-						$smtp_port         = (isset($_POST['smtp_port']) ? $_POST['smtp_port'] : "");
-						$smtp_auth         = (isset($_POST['smtp_auth']) ? $_POST['smtp_auth'] : 0);
-						$smtp_login        = (isset($_POST['smtp_login']) ? $_POST['smtp_login'] : "");
-						$smtp_pass         = (isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : "");
-						$mod_sub           = (isset($_POST['mod_sub']) ? $_POST['mod_sub'] : 0);
-						$db_type           = (isset($_POST['db_type']) ? $_POST['db_type'] : "");
-						$hostname          = (isset($_POST['db_host']) ? $_POST['db_host'] : "");
-						$login             = (isset($_POST['db_login']) ? $_POST['db_login'] : "");
-						$pass              = (isset($_POST['db_pass']) ? $_POST['db_pass'] : "");
-						$database          = (isset($_POST['db_name']) ? $_POST['db_name'] : "");
-						$table_prefix      = (isset($_POST['table_prefix']) ? $_POST['table_prefix'] : "pmn2_");
-						$storage_engine    = (isset($_POST['storage_engine']) ? $_POST['storage_engine'] : "MyISAM");
-						$admin_pass        = (isset($_POST['admin_pass']) ? $_POST['admin_pass'] : "");
-						$timezone          = (isset($_POST['timezone']) ? $_POST['timezone'] : "");
-						$base_url          = (isset($_POST['base_url']) ? $_POST['base_url'] : "");
-						$path              = (isset($_POST['path']) ? $_POST['path'] : "");
-						$sending_method    = (isset($_POST['sending_method']) ? $_POST['sending_method'] : "");
-						$language          = (isset($_POST['language']) ? $_POST['language'] : "");
-						$sending_limit     = (isset($_POST['sending_limit']) ? $_POST['sending_limit'] : "");
+						echo '<h3>' . tr("INSTALL_RESULT_INSTALLATION") . '</h3>';
+						$createdb = (isset($_POST['createdb']) ? $_POST['createdb'] : 0);
+						$createtables = (isset($_POST['createtables']) ? $_POST['createtables'] : 0);
+						$smtp_host = (isset($_POST['smtp_host']) ? $_POST['smtp_host'] : "");
+						$smtp_port = (isset($_POST['smtp_port']) ? $_POST['smtp_port'] : "");
+						$smtp_auth = (isset($_POST['smtp_auth']) ? $_POST['smtp_auth'] : 0);
+						$smtp_login = (isset($_POST['smtp_login']) ? $_POST['smtp_login'] : "");
+						$smtp_pass = (isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : "");
+						$mod_sub = (isset($_POST['mod_sub']) ? $_POST['mod_sub'] : 0);
+						$db_type = (isset($_POST['db_type']) ? $_POST['db_type'] : "");
+						$hostname = (isset($_POST['db_host']) ? $_POST['db_host'] : "");
+						$login = (isset($_POST['db_login']) ? $_POST['db_login'] : "");
+						$pass = (isset($_POST['db_pass']) ? $_POST['db_pass'] : "");
+						$database = (isset($_POST['db_name']) ? $_POST['db_name'] : "");
+						$table_prefix = (isset($_POST['table_prefix']) ? $_POST['table_prefix'] : "pmn2_");
+						$storage_engine = (isset($_POST['storage_engine']) ? $_POST['storage_engine'] : "MyISAM");
+						$admin_pass = (isset($_POST['admin_pass']) ? $_POST['admin_pass'] : "");
+						$timezone = (isset($_POST['timezone']) ? $_POST['timezone'] : "");
+						$base_url = (isset($_POST['base_url']) ? $_POST['base_url'] : "");
+						$path = (isset($_POST['path']) ? $_POST['path'] : "");
+						$sending_method = (isset($_POST['sending_method']) ? $_POST['sending_method'] : "");
+						$language = (isset($_POST['language']) ? $_POST['language'] : "");
+						$sending_limit = (isset($_POST['sending_limit']) ? $_POST['sending_limit'] : "");
 						$validation_period = (isset($_POST['validation_period']) ? $_POST['validation_period'] : "");
-						$sub_validation    = (isset($_POST['sub_validation']) ? $_POST['sub_validation'] : "");
-						$unsub_validation  = (isset($_POST['unsub_validation']) ? $_POST['unsub_validation'] : "");
-						$admin_email       = (isset($_POST['admin_email']) ? $_POST['admin_email'] : "");
-						$admin_name        = (isset($_POST['admin_name']) ? $_POST['admin_name'] : "");
-						$sub_validation    = (isset($_POST['sub_validation']) ? $_POST['sub_validation'] : "");
-						$type_serveur      = (isset($_POST['type_serveur']) ? $_POST['type_serveur'] : "shared");
-						$type_env          = (isset($_POST['type_env']) ? $_POST['type_env'] : "dev");
-						$alert_sub         = (isset($_POST['alert_sub']) ? $_POST['alert_sub'] : "1");
+						$sub_validation = (isset($_POST['sub_validation']) ? $_POST['sub_validation'] : "");
+						$unsub_validation = (isset($_POST['unsub_validation']) ? $_POST['unsub_validation'] : "");
+						$admin_email = (isset($_POST['admin_email']) ? $_POST['admin_email'] : "");
+						$admin_name = (isset($_POST['admin_name']) ? $_POST['admin_name'] : "");
+						$sub_validation = (isset($_POST['sub_validation']) ? $_POST['sub_validation'] : "");
+						$type_serveur = (isset($_POST['type_serveur']) ? $_POST['type_serveur'] : "shared");
+						$type_env = (isset($_POST['type_env']) ? $_POST['type_env'] : "dev");
+						$alert_sub = (isset($_POST['alert_sub']) ? $_POST['alert_sub'] : "1");
 						if ($createdb == 1) {
-							switch($db_type){
-							case 'mysql':
-								$conn = new mysqli($hostname, $login, $pass);
-								if ($conn->connect_error) {
-									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $conn->connect_error) . "<br>" . tr("INSTALL_CREATE_DB_DOWN") . " !<br>" . tr("INSTALL_REFRESH") . " !</h4>");
-								}
-								$sql = "CREATE DATABASE IF NOT EXISTS $database";
-								if ($conn->query($sql) === TRUE) {
-									echo "<h4 class='alert alert-success'>" . tr("INSTALL_SAVE_CREATE_DB", $database) . " OK</h4>";
-								} else {
-									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $conn->error) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_CREATE_DB_DOWN") . " !<br>" . tr("INSTALL_REFRESH") . " !</h4>");
-								}
-								$conn->close();
-							break;
+							switch ($db_type) {
+								case 'mysql':
+									$conn = new mysqli($hostname, $login, $pass);
+									if ($conn->connect_error) {
+										die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $conn->connect_error) . "<br>" . tr("INSTALL_CREATE_DB_DOWN") . " !<br>" . tr("INSTALL_REFRESH") . " !</h4>");
+									}
+									$sql = "CREATE DATABASE IF NOT EXISTS $database";
+									if ($conn->query($sql) === TRUE) {
+										echo "<h4 class='alert alert-success'>" . tr("INSTALL_SAVE_CREATE_DB", $database) . " OK</h4>";
+									} else {
+										die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $conn->error) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_CREATE_DB_DOWN") . " !<br>" . tr("INSTALL_REFRESH") . " !</h4>");
+									}
+									$conn->close();
+									break;
 								case 'mssql':
 								case 'pgsql':
 								case 'oracle':
-								die('Not yet available... :-(');
-							break;
+									die('Not yet available... :-(');
+									break;
 							}
 						}
 						include_once("include/db/db_connector.inc.php");
-						if(!is_dir("upload")){
-							if(mkdir("upload",0755)){
-								echo '<h4 class="alert alert-success">'.tr("UPLOAD_DIRECTORY").' '.tr("DONE").'</h4>';
+						if (!is_dir("upload")) {
+							if (mkdir("upload", 0755)) {
+								echo '<h4 class="alert alert-success">' . tr("UPLOAD_DIRECTORY") . ' ' . tr("DONE") . '</h4>';
 							} else {
-								die('<h4 class="alert alert-danger">'.tr("UPLOAD_DIRECTORY").' : "'.$path.'upload".<br>'
-								. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "'.$path.'upload" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
+								die('<h4 class="alert alert-danger">' . tr("UPLOAD_DIRECTORY") . ' : "' . $path . 'upload".<br>'
+									. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "' . $path . 'upload" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
 							}
 						}
-						if(!is_dir("include/DKIM")){
-							if(mkdir("include/DKIM",0755)){
-								echo '<h4 class="alert alert-success">'.tr("DKIM_DIRECTORY").' '.tr("DONE").'</h4>';
+						if (!is_dir("include/DKIM")) {
+							if (mkdir("include/DKIM", 0755)) {
+								echo '<h4 class="alert alert-success">' . tr("DKIM_DIRECTORY") . ' ' . tr("DONE") . '</h4>';
 							} else {
-								die('<h4 class="alert alert-danger">'.tr("DKIM_DIRECTORY").' : "'.$path.'include/DKIM".<br>'
-								. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "'.$path.'include/DKIM" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
+								die('<h4 class="alert alert-danger">' . tr("DKIM_DIRECTORY") . ' : "' . $path . 'include/DKIM".<br>'
+									. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "' . $path . 'include/DKIM" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
 							}
 						}
-						if(!is_dir("logs")){
-							if(mkdir("logs",0777)){
-								echo '<h4 class="alert alert-success">'.tr("LOGS_DIRECTORY").' '.tr("DONE").'</h4>';
+						if (!is_dir("logs")) {
+							if (mkdir("logs", 0777)) {
+								echo '<h4 class="alert alert-success">' . tr("LOGS_DIRECTORY") . ' ' . tr("DONE") . '</h4>';
 							} else {
-								die('<h4 class="alert alert-danger">'.tr("LOGS_DIRECTORY").' : "'.$path.'logs".<br>'
-								. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "'.$path.'logs" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
+								die('<h4 class="alert alert-danger">' . tr("LOGS_DIRECTORY") . ' : "' . $path . 'logs".<br>'
+									. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "' . $path . 'logs" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
 							}
 						}
-						if(!is_dir("include/backup_crontab")){
-							if(mkdir("include/backup_crontab",0755)){
-								echo '<h4 class="alert alert-success">'.tr("BK_CRONTAB_DIRECTORY").' '.tr("DONE").'</h4>';
+						if (!is_dir("include/backup_crontab")) {
+							if (mkdir("include/backup_crontab", 0755)) {
+								echo '<h4 class="alert alert-success">' . tr("BK_CRONTAB_DIRECTORY") . ' ' . tr("DONE") . '</h4>';
 							} else {
-								die('<h4 class="alert alert-danger">'.tr("BK_CRONTAB_DIRECTORY").' : "'.$path.'include/backup_crontab".<br>'
-								. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "'.$path.'include/backup_crontab" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
+								die('<h4 class="alert alert-danger">' . tr("BK_CRONTAB_DIRECTORY") . ' : "' . $path . 'include/backup_crontab".<br>'
+									. tr("CHECK_PERMISSIONS_OR_CREATE") . ' "' . $path . 'include/backup_crontab" ' . tr("MANUALLY") . '<br>' . tr("INSTALL_REFRESH") . ' !</div>');
 							}
 						}
 						if ($db_type == "mysql") {
 							if ($createtables == 1) {
-								$cnx->query( "SET sql_mode = '';" );
+								$cnx->query("SET sql_mode = '';");
 								$sql = 'CREATE TABLE IF NOT EXISTS `' . $table_prefix . 'archives` (
 									`id` INT(7) UNSIGNED NOT NULL AUTO_INCREMENT,
 									`date` DATETIME NOT NULL DEFAULT "000-00-00 00:00:00",
@@ -272,10 +290,10 @@ if (empty($langfile)) {
 									PRIMARY KEY (`id`),
 									KEY `list_id` (`list_id`),
 									KEY `sender_email` (`sender_email`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8  AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "archives") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8  AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "archives") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -288,10 +306,10 @@ if (empty($langfile)) {
 									`sender_email` VARCHAR(255) NOT NULL,
 									`preheader` TEXT NOT NULL,
 									UNIQUE KEY `list_id` (`list_id`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "autosave") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "autosave") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -306,10 +324,10 @@ if (empty($langfile)) {
 									KEY `long` (`long`),
 									KEY `country` (`country`),
 									KEY `color` (`color`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "codes") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "codes") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -354,10 +372,10 @@ if (empty($langfile)) {
 									`table_senders` VARCHAR(255) NOT NULL,
 									`table_users` VARCHAR(255) NOT NULL,
 									`table_codes` VARCHAR(255) NOT NULL
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "config") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "config") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -381,10 +399,10 @@ if (empty($langfile)) {
 									KEY `list_id` (`list_id`),
 									KEY `msg_id` (`msg_id`),
 									KEY `date` (`date`)
-								) ENGINE='.$storage_engine.'  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "crontab") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . '  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "crontab") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -408,10 +426,10 @@ if (empty($langfile)) {
 									KEY `type` (`type`),
 									KEY `categorie` (`categorie`),
 									KEY `campaign_id` (`campaign_id`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "email") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "email") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -435,10 +453,10 @@ if (empty($langfile)) {
 									KEY `type` (`type`),
 									KEY `categorie` (`categorie`),
 									KEY `campaign_id` (`campaign_id`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "email_deleted") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "email_deleted") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -458,10 +476,10 @@ if (empty($langfile)) {
 									`quit_body` TEXT NOT NULL,
 									`preview_addr` VARCHAR(255) NOT NULL DEFAULT "",
 									PRIMARY KEY (`list_id`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "listconfig") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "listconfig") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -476,10 +494,10 @@ if (empty($langfile)) {
 									KEY `id_mail` (`id_mail`),
 									KEY `id_list` (`id_list`),
 									KEY `cpt` (`cpt`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "send") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "send") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -505,10 +523,10 @@ if (empty($langfile)) {
 									KEY `id_sender` (`id_sender`),
 									KEY `email` (`email`),
 									KEY `last_send` (`last_send`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "senders") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "senders") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -525,10 +543,10 @@ if (empty($langfile)) {
 									KEY `last_id_send` (`last_id_send`),
 									KEY `nb_send` (`nb_send`),
 									KEY `total_to_send` (`total_to_send`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "send_suivi") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "send_suivi") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -550,10 +568,10 @@ if (empty($langfile)) {
 									KEY `smtp_limite` (`smtp_limite`),
 									KEY `smtp_url` (`smtp_url`),
 									KEY `smtp_port` (`smtp_port`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "smtp") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "smtp") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -561,10 +579,10 @@ if (empty($langfile)) {
 									`email` VARCHAR(255) NOT NULL DEFAULT "",
 									`list_id` INT(4) UNSIGNED NOT NULL DEFAULT "0",
 									KEY `list_id` (`list_id`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "sub") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "sub") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -577,10 +595,10 @@ if (empty($langfile)) {
 									KEY `list_id` (`list_id`),
 									KEY `hash` (`hash`),
 									KEY `date` (`date`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "temp") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "temp") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -618,10 +636,10 @@ if (empty($langfile)) {
 									KEY `postal_code` (`postal_code`),
 									KEY `region` (`region`),
 									KEY `country` (`country`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "track") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "track") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -640,10 +658,10 @@ if (empty($langfile)) {
 									KEY `cpt` (`cpt`),
 									KEY `link` (`link`(255)),
 									KEY `dt_track_link` (`dt_track_link`)
-								) ENGINE='.$storage_engine.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "track_links") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "track_links") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -658,10 +676,10 @@ if (empty($langfile)) {
 									KEY `msg_id` (`msg_id`),
 									KEY `name` (`name`(255)),
 									KEY `date` (`date`)
-								) ENGINE='.$storage_engine.'  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "upload") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . '  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "upload") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 								$sql = 'CREATE TABLE IF NOT EXISTS `' . $table_prefix . 'users` (
@@ -678,10 +696,10 @@ if (empty($langfile)) {
 									`log` VARCHAR(1) NOT NULL DEFAULT "Y",
 									KEY `id_user` (`id_user`),
 									KEY `email` (`email`)
-								) ENGINE='.$storage_engine.'  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-								if($cnx->Sql($sql)){
-									echo '<h4 class="alert alert-success">'.tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "users") .' '.tr("DONE").'</h4>';
-								}else{
+								) ENGINE=' . $storage_engine . '  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
+								if ($cnx->Sql($sql)) {
+									echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CREATE_TABLE", $table_prefix . "users") . ' ' . tr("DONE") . '</h4>';
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -926,9 +944,9 @@ if (empty($langfile)) {
 									("ZW", "-20.00000000", "30.00000000", "Zimbabwe", "#de4c4f"),
 									("MF", "18.40000000", "-63.40000000", "Saint Martin", "#a7a737"),
 									("CW", "9.30000000", "72.52600000", "Curacao", "#86a965");';
-								if($cnx->Sql($sql)){
+								if ($cnx->Sql($sql)) {
 									echo '<h4 class="alert alert-success">Chargement des codes pays fait</h4>';
-								}else{
+								} else {
 									die("<h4 class='alert alert-danger'>" . tr("ERROR_SQL", $db->DbError()) . "<br>" . tr("QUERY") . " : " . $sql . "<br>" . tr("INSTALL_REFRESH") . " !</h4>");
 								}
 
@@ -940,28 +958,28 @@ if (empty($langfile)) {
 						} elseif ($db_type == "oracle") {
 							die('ORACLE, ' . tr("NOT_YET_AVAILABLE"));
 						}
-						$table_prefix 		= $cnx->CleanInput($table_prefix);
-						$admin_pass 		= $cnx->CleanInput($admin_pass);
-						$base_url 			= $cnx->CleanInput($base_url);
-						$path 				= $cnx->CleanInput($path);
-						$smtp_host 			= $cnx->CleanInput($smtp_host);
-						$smtp_login 		= $cnx->CleanInput($smtp_login);
-						$smtp_pass 			= $cnx->CleanInput($smtp_pass);
-						$smtp_port 			= $cnx->CleanInput($smtp_port);
-						$sending_limit 		= $cnx->CleanInput($sending_limit);
-						$validation_period 	= $cnx->CleanInput($validation_period);
-						$sub_validation 	= $cnx->CleanInput($sub_validation);
-						$unsub_validation 	= $cnx->CleanInput($unsub_validation);
-						$admin_email 		= $cnx->CleanInput($admin_email);
-						$admin_name 		= $cnx->CleanInput($admin_name);
-						$mod_sub 			= $cnx->CleanInput($mod_sub);
-						$alert_sub 			= $cnx->CleanInput($alert_sub);
-						$admin_pass 		= md5($admin_pass);
+						$table_prefix = $cnx->CleanInput($table_prefix);
+						$admin_pass = $cnx->CleanInput($admin_pass);
+						$base_url = $cnx->CleanInput($base_url);
+						$path = $cnx->CleanInput($path);
+						$smtp_host = $cnx->CleanInput($smtp_host);
+						$smtp_login = $cnx->CleanInput($smtp_login);
+						$smtp_pass = $cnx->CleanInput($smtp_pass);
+						$smtp_port = $cnx->CleanInput($smtp_port);
+						$sending_limit = $cnx->CleanInput($sending_limit);
+						$validation_period = $cnx->CleanInput($validation_period);
+						$sub_validation = $cnx->CleanInput($sub_validation);
+						$unsub_validation = $cnx->CleanInput($unsub_validation);
+						$admin_email = $cnx->CleanInput($admin_email);
+						$admin_name = $cnx->CleanInput($admin_name);
+						$mod_sub = $cnx->CleanInput($mod_sub);
+						$alert_sub = $cnx->CleanInput($alert_sub);
+						$admin_pass = md5($admin_pass);
 						$sql = "TRUNCATE TABLE `" . $table_prefix . "config`;
 							INSERT INTO `" . $table_prefix . "config` VALUES (
 							'$admin_pass', '30', '$base_url', '$path', '$sending_method',
 							'$language', '" . $table_prefix . "email', '" . $table_prefix . "temp',
-							'". $table_prefix . "listsconfig', '" . $table_prefix . "archives',
+							'" . $table_prefix . "listsconfig', '" . $table_prefix . "archives',
 							'$smtp_host', '$smtp_port', '$smtp_auth','$smtp_login',
 							'$smtp_pass', '$sending_limit', '$validation_period',
 							'$sub_validation', '$unsub_validation', '$admin_email',
@@ -973,9 +991,9 @@ if (empty($langfile)) {
 							'" . $table_prefix . "smtp','$alert_sub','1','1','',
 							'" . $table_prefix . "senders','" . $table_prefix . "users',
 							'" . $table_prefix . "codes')";
-						if($cnx->Sql($sql)){
-							echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CONFIG") . ' ' .tr("DONE").'</h4>';
-						}else{
+						if ($cnx->Sql($sql)) {
+							echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CONFIG") . ' ' . tr("DONE") . '</h4>';
+						} else {
 							die('<h4 class="alert alert-danger">' . tr("ERROR_SQL", $db->DbError()) . '<br>' . tr("QUERY") . ' : ' . $sql . '<br>' . tr("INSTALL_REFRESH") . ' !</h4>');
 						}
 						$configfile = "<?php\nif ( !defined( '_CONFIG' ) ) {\n\tdefine('_CONFIG', 1);";
@@ -1003,44 +1021,45 @@ if (empty($langfile)) {
 						$configfile .= "\n\t$" . "unsub_validation_sms = 0;";
 						$configfile .= "\n\t$" . "alert_unsub          = $alert_sub;";
 						$configfile .= "\n\t$" . "table_global_config  = '" . $table_prefix . "config';";
-						if(is_exec_available()){
+						if (is_exec_available()) {
 							$configfile .= "\n\t$" . "exec_available       = true;";
-						}else{
+						} else {
 							$configfile .= "\n\t$" . "exec_available       = false;";
 						}
 						$configfile .= "\n\t$" . "pmnl_version         = '$version';\n}";
 						if (is_writable("include/")) {
 							$fc = fopen("include/config.php", "w");
-							$w  = fwrite($fc, $configfile);
+							$w = fwrite($fc, $configfile);
 							echo '<h4 class="alert alert-success">' . tr("INSTALL_SAVE_CONFIG_FILE") . ' : ' . tr("OK_BTN") . ' </div> ';
 						} else {
-							echo tr("INSTALL_CONFIG_MANUALLY").'<br>';
+							echo tr("INSTALL_CONFIG_MANUALLY") . '<br>';
 							echo "<textarea cols=60 rows=18>" . $configfile . "</textarea>";
 							die("<h4 class='alert alert-danger'>" . tr("INSTALL_UNABLE_TO_SAVE_CONFIG_FILE") . "<br>" . tr("MANUALLY_SAVE_CONF", $base_url) . ".</h4>");
 						}
-						echo '<br><div align="center"><img src="js/tinymce/plugins/emoticons/img/smiley-cool.gif" alt="Yeah ! '. tr("YOU_DID_IT") . ' !" title="Yeah ! '. tr("YOU_DID_IT") . ' !" width="18" heigh="18" /><br><a href="index.php">' . tr("INSTALL_FINISHED") . '</a></div>';
-						echo '<div class="row"><div class="col-md-11  col-md-offset-1"><h3>'.tr("CREDITS_WITH").' :</h3>
+						echo '<br><div align="center"><img src="js/tinymce/plugins/emoticons/img/smiley-cool.gif" alt="Yeah ! ' . tr("YOU_DID_IT") . ' !" title="Yeah ! ' . tr("YOU_DID_IT") . ' !" width="18" heigh="18" /><br><a href="index.php">' . tr("INSTALL_FINISHED") . '</a></div>';
+						echo '<div class="row"><div class="col-md-11  col-md-offset-1"><h3>' . tr("CREDITS_WITH") . ' :</h3>
 						<ul>
-						<li><a href="http://gregory.kokanosky.free.fr/v4/phpmynewsletter/" target="_blank">'. tr("CREDITS_GREGORY") . '</a></li>
-						<li><a href="https://github.com/Synchro/PHPMailer">'. tr("CREDITS_PHPMAILER") . '</a></li>
-						<li><a href="http://www.tinymce.com/" target="_blank">'. tr("CREDITS_TINYMCE") . '</a></li>
-						<li><a href="http://www.crazyws.fr/dev/classes-php/classe-de-gestion-des-bounces-en-php-C72TG.html" target="_blank">'. tr("CREDITS_CRAZY") . '</a></li>
+						<li><a href="http://gregory.kokanosky.free.fr/v4/phpmynewsletter/" target="_blank">' . tr("CREDITS_GREGORY") . '</a></li>
+						<li><a href="https://github.com/Synchro/PHPMailer">' . tr("CREDITS_PHPMAILER") . '</a></li>
+						<li><a href="http://www.tinymce.com/" target="_blank">' . tr("CREDITS_TINYMCE") . '</a></li>
+						<li><a href="http://www.crazyws.fr/dev/classes-php/classe-de-gestion-des-bounces-en-php-C72TG.html" target="_blank">' . tr("CREDITS_CRAZY") . '</a></li>
 						<li><a href="http://www.amcharts.com/" target="_blank">AM<b>CHARTS</b></a></li>
-						<li><a href="http://www.dropzonejs.com/" target="_blank">DropZone.js : '. tr("CREDITS_DND") . '</a></li>
+						<li><a href="http://www.dropzonejs.com/" target="_blank">DropZone.js : ' . tr("CREDITS_DND") . '</a></li>
 						</ul>
-							<h3>'. tr("LICENSE") . ' :</h3>
-						<p>'. tr("LICENSE_TERMS") . '.</p>
-							<h3>'. tr("CONTRIBUTE") . ' :</h3>
-						<p>'. tr("CONTRIBUTE_HELP") . '.</p>
-							<h3>'. tr("SUPPORT") . ' :</h3>
-						<p>'. tr("ASK_ON_FORUM") . '.</p>
+							<h3>' . tr("LICENSE") . ' :</h3>
+						<p>' . tr("LICENSE_TERMS") . '.</p>
+							<h3>' . tr("CONTRIBUTE") . ' :</h3>
+						<p>' . tr("CONTRIBUTE_HELP") . '.</p>
+							<h3>' . tr("SUPPORT") . ' :</h3>
+						<p>' . tr("ASK_ON_FORUM") . '.</p>
 						</div></div>';
 					}
-				?>
+					?>
 				</div>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">$('#ts').jsclock('<?php echo date('H:i:s');?>');</script>
+	<script type="text/javascript">$('#ts').jsclock('<?php echo date('H:i:s'); ?>');</script>
 </body>
+
 </html>

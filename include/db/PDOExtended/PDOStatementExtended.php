@@ -30,7 +30,7 @@
 		
 		protected	$Keywords		=	Array();
 		protected	$BoundValues	=	Array();
-		public		$queryString;
+		public string		$queryString;
 		protected	$Preview;
 		protected	$Duration;
 		protected	$Executed		=	false;
@@ -39,52 +39,98 @@
 		/**
 		 * When bindValue() is called, we store its params
 		 */
-		public function BindValue($Parameter, $Value, $PDOType = null) {	
+		// public function BindValue($Parameter, $Value, $PDOType = null) {	
 			
-			# Flush Bound Values if statement has previously been executed
-			if ($this->Executed)
-				$this->BoundValues	=	Array()		AND		$this->Executed = false;	
+		// 	# Flush Bound Values if statement has previously been executed
+		// 	if ($this->Executed)
+		// 		$this->BoundValues	=	Array()		AND		$this->Executed = false;	
 				
-			$this->BoundValues[]	=	Array('Parameter' => $Parameter, 'Value' => $Value, 'PDOType' => $PDOType);
-			parent::BindValue($Parameter, $Value, $PDOType);
-			return $this;
-		}
+		// 	$this->BoundValues[]	=	Array('Parameter' => $Parameter, 'Value' => $Value, 'PDOType' => $PDOType);
+		// 	parent::BindValue($Parameter, $Value, $PDOType);
+		// 	return $this;
+		// }
+
+		public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR): bool
+    {
+        # Flush Bound Values if statement has previously been executed
+        if ($this->Executed) {
+            $this->BoundValues = array();
+            $this->Executed = false;
+        }
+
+        $this->BoundValues[] = array('Parameter' => $parameter, 'Value' => $value, 'PDOType' => $data_type);
+        parent::bindValue($parameter, $value, $data_type);
+        return true;
+    }
 		
 		/**
 		 * Binds several values at once
 		 */
-		public function BindValues($SqlValues = array()) {
+		// public function BindValues($SqlValues = array()) {
 		
-			if (empty($SqlValues))
-				return $this;
+		// 	if (empty($SqlValues))
+		// 		return $this;
 		
-			if (!is_array($SqlValues))
-				$SqlValues	=	Array($SqlValues);
+		// 	if (!is_array($SqlValues))
+		// 		$SqlValues	=	Array($SqlValues);
 				
-			foreach ($SqlValues AS $Key => $Value)
-				if (is_numeric($Key))
-					$this   ->  BindValue((int) $Key + 1, $Value, self::PDOType($Value));
-				else
-					$this   ->  BindValue(':' . $Key, $Value, self::PDOType($Value));
+		// 	foreach ($SqlValues AS $Key => $Value)
+		// 		if (is_numeric($Key))
+		// 			$this   ->  BindValue((int) $Key + 1, $Value, self::PDOType($Value));
+		// 		else
+		// 			$this   ->  BindValue(':' . $Key, $Value, self::PDOType($Value));
 					
-			return $this;
-		}
+		// 	return $this;
+		// }
+
+		public function bindValues($sql_values = array()): PDOStatementExtended
+    {
+        if (empty($sql_values)) {
+            return $this;
+        }
+
+        if (!is_array($sql_values)) {
+            $sql_values = array($sql_values);
+        }
+
+        foreach ($sql_values as $key => $value) {
+            $this->bindValue($key + 1, $value);
+        }
+
+        return $this;
+    }
 		
 		/**
 		 * Executes query, measures the total time
 		 */
-		public function Execute($input_parameters = null) {
+		// public function Execute($input_parameters = null) {
 		
-			$Start			=	microtime(true);
-			parent::Execute($input_parameters);
-			$End			=	microtime(true);
+		// 	$Start			=	microtime(true);
+		// 	parent::Execute($input_parameters);
+		// 	$End			=	microtime(true);
 			
-			$this->Duration	=	round($End - $Start, 4);			
-			$this->Executed	=	true;	
-			$this->ExecCount++;	
+		// 	$this->Duration	=	round($End - $Start, 4);			
+		// 	$this->Executed	=	true;	
+		// 	$this->ExecCount++;	
 			
-			return $this;
-		}
+		// 	return $this;
+		// }
+
+		public function execute($params = null): bool
+    {
+        $this->Executed = true;
+        $this->ExecCount++;
+
+        try {
+            $start = microtime(true);
+            $result = parent::execute($params);
+            $end = microtime(true);
+            $this->Duration = $end - $start;
+            return $result;
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage() . "\n" . $this->queryString);
+        }
+    }
 		
 		/**
 		 * Executes the statement with bounded params

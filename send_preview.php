@@ -74,9 +74,20 @@ switch ($step) {
 		$mail->PluginDir	= "include/lib/";
 		$msg			= getConfig($cnx,$list_id,$row_config_globale['table_sauvegarde']);
 		$newsletter		= getConfigSender($cnx, $row_config_globale['table_senders'], $msg['sender_email']);
-		$sender_email		= $newsletter['email'];
-		$sender_name		= $newsletter['name_organisation'];
-		$reply_email		= $newsletter['email_reply'];
+		// $sender_email		= $newsletter['email'];
+		// $sender_name		= $newsletter['name_organisation'];
+		// $reply_email		= $newsletter['email_reply'];
+
+		if(isset($newsletter['email']) && is_string($newsletter['email'])) {
+			$sender_email = $newsletter['email'];
+		}
+		if (isset($newsletter['name_organisation']) && is_string($newsletter['name_organisation'])) {
+			$sender_name = $newsletter['name_organisation'];
+		}
+		if (isset($newsletter['email_reply']) && is_string($newsletter['email_reply'])) {
+			$sender_name = $newsletter['email_reply'];
+		}
+
 		$altersender		= getConfig($cnx, $list_id, $row_config_globale['table_listsconfig']);
 		if (empty($sender_email)) {
 			$sender_email	= $altersender['from_addr'];
@@ -84,19 +95,38 @@ switch ($step) {
 			$reply_email	= $altersender['from_addr'];
 		}
 		// recherche du mail de bounce (retour des non distribués), du particulier au général, sinon, par défaut : $bounce_mail
-		if (empty(trim($newsletter['bounce_email']))) { 		// from array $newsletter : particular desc
-			if (empty(trim($bounce_mail))) { 			// from config_bounce.php : global desc
-				$bounce_email = $altersender['from_addr'];	// from array $altersender : default desc
-			} else {
-				$bounce_email = $bounce_mail;
-			}
-		} else {
+		// if (empty(trim($newsletter['bounce_email']))) { 		// from array $newsletter : particular desc
+		// 	if (empty(trim($bounce_mail))) { 			// from config_bounce.php : global desc
+		// 		$bounce_email = $altersender['from_addr'];	// from array $altersender : default desc
+		// 	} else {
+		// 		$bounce_email = $bounce_mail;
+		// 	}
+		// } else {
+		// 	$bounce_email = $newsletter['bounce_email'];
+		// }
+
+		if (isset($newsletter['bounce_email']) && is_string($newsletter['bounce_email'])) {
 			$bounce_email = $newsletter['bounce_email'];
+		} elseif (isset($bounce_mail) && is_string($bounce_mail)) {
+			$bounce_email = $bounce_mail;
+		} elseif (isset($altersender['from_addr']) && is_string($altersender['from_addr'])) {
+			$bounce_email = $altersender['from_addr'];
+		} else {
+			$bounce_email = '';
 		}
+
+
 		$mail->AddReplyTo($reply_email);		
 		$mail->SetFrom($sender_email,$sender_name);
 		$mail->Sender 	= $bounce_email;
-		$addr = $dest_adresse = $altersender['preview_addr'];
+		// $addr = $dest_adresse = $altersender['preview_addr'];
+
+		if (isset($altersender['preview_addr']) && is_string($altersender['preview_addr'])) {
+			$addr = $dest_adresse = trim($altersender['preview_addr']);
+		} else {
+			$addr = $dest_adresse = '';
+		}
+
 		include("include/lib/switch_smtp.php");
 		$format			= $msg['type'];
 		$list_pj = $cnx->query("SELECT *
